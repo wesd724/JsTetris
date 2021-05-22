@@ -1,16 +1,12 @@
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
+canvas.width = 420;
+canvas.height = 680;
 
-const rect = (x, y, width, height, fillColor, borderWidth = null, borderColor = null) => {
-    ctx.beginPath();
-    ctx.rect(x, y, width, height);
-    ctx.fillStyle = fillColor;
-    ctx.fill();
-    ctx.lineWidth = borderWidth;
-    ctx.strokeStyle = borderColor;
-    ctx.stroke();
-    ctx.closePath();
+const rect = (x, y, width, height, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
 }
 
-export { canvas, rect };
+export { canvas, ctx, rect };
 

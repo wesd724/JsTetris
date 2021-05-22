@@ -1,4 +1,7 @@
-import { background, wall } from "./UI.js";
+import  bg from "./background.js";
+import { blockCoordinate } from "./block.js"
+import render from "./render.js";
 
-background();
-wall();
+bg();
+blockCoordinate();
+//setInterval(render, 500);
