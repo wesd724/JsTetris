@@ -1,13 +1,14 @@
 import { canvas, ctx } from "./canvas.js";
-import { blockCoordinate } from "./block.js";
-
+import { drawMap } from "./map.js";
+import { downBlock } from "./block.js";
 const paint = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMap();
 }
 
 const render = () => {
+    downBlock();
     paint();
-    blockCoordinate();
 }
 
-export default render;
+export { render as default, paint };

@@ -1,7 +1,11 @@
 import  bg from "./background.js";
-import { blockCoordinate } from "./block.js"
+import { initializeMap, drawMap } from "./map.js";
+import { moveBlock } from "./block.js";
 import render from "./render.js";
 
 bg();
-blockCoordinate();
-//setInterval(render, 500);
+
+initializeMap();
+drawMap();
+document.addEventListener("click", render);
+//setInterval(render, 300);
