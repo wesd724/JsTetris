@@ -1,18 +1,18 @@
 import { canvas, rect } from "./canvas.js";
 import { paint } from "./render.js";
-import { mapCoordinate } from "./map.js";
+import { mapCoordinate, mapCoordinateCopy } from "./map.js";
 import { blockShape } from "./blockShape.js";
 
-let status = true;
-let index = Math.floor(Math.random() * 7);
-console.log(index);
 let fillBlock = 0;
 let dy = 0;
+let index = Math.floor(Math.random() * 7);
+console.log(index);
+
 const length = blockShape[index].length;
 const height = canvas.height / 20;
 const width = canvas.width / 20;
 const blockSize = 20;
-const blockCoordinate = { x: 10, y: 1 };
+const blockCoordinate = { x: 10, y: 0 };
 
 const downBlock = () => {
     blockCoordinate.y++;
@@ -32,17 +32,18 @@ const downBlock = () => {
         }
     }
     if(blockCoordinate.y + dy == height - 1) {
+        index = Math.floor(Math.random() * 7);
+        deleteFilledLine();
         blockCoordinate.y = 1;
-        checkFloorFull();
     } else {
         collisionDetection(40);
     }
 }
 
-const moveBlock = (e, index) => {
+const moveBlock = (e) => {
     fillBlock = 0;
     if(e.keyCode == 37) {// ←
-        collisionDetection(e.keyCode)
+        collisionDetection(e.keyCode);
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][i][j] == 1) {
@@ -59,7 +60,7 @@ const moveBlock = (e, index) => {
         }
     }
     else if(e.keyCode == 39) {// →
-        collisionDetection(e.keyCode) 
+        collisionDetection(e.keyCode);
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][i][j] == 1) {
@@ -92,34 +93,60 @@ const moveBlock = (e, index) => {
                 }
             }
         }
+        
         if(blockCoordinate.y + dy == height - 1) {
+            index = Math.floor(Math.random() * 7);
+            deleteFilledLine();
             blockCoordinate.y = 1;
-            checkFloorFull();
         } else {
             collisionDetection(e.keyCode);
         }
     }
 }
 
-const checkFloorFull = () => {
-    for(let i = 0; i < width; i++) {
-        if(mapCoordinate[height - 1][i] == 1) {
-            fillBlock++;
-            if(fillBlock == width) {
-                for(let i = 0; i < width; i++) {
-                    mapCoordinate[height - 1][i] = 0;
+const deleteFilledLine = () => {
+    for(let i = 0; i < height; i++) {
+        for(let j = 0; j < width; j++) {
+            if(mapCoordinate[i][j] == 1) {
+                fillBlock++;
+                if(fillBlock == width - 1) {
+                    let lineNumber = i;
+                    console.log(`DELETE ${lineNumber}`);
+                    for(let i = 0; i < width; i++) {
+                        mapCoordinate[lineNumber][i] = 0;
+                     }
+                    allLinedown(lineNumber);
                 }
+            } else {
+                fillBlock = 0;
+                break;
             }
         }
     }
 }
 
-const collisionDetection = (keyCode) => {
+const allLinedown = lineNumber => {
+    for(let i = 0; i < lineNumber; i++) {
+        for(let j = 0; j < width; j++) {
+            mapCoordinateCopy[i][j] = mapCoordinate[i][j];
+        }
+    }
+    for(let i = 0; i < lineNumber; i++) {
+        for(let j = 0; j < width; j++) {
+            mapCoordinate[i + 1][j] = mapCoordinateCopy[i][j];
+        }
+    }
+    for(let i = 0; i < width; i++) mapCoordinate[0][i] = 0;
+}
+
+const collisionDetection = keyCode => {
     if(keyCode == 40) {
         for(let i = 0; i < length; i++) {
             for(let j = length - 1; j >= 0; j--) {
                 if(blockShape[index][j][i] == 1) {
                     if(mapCoordinate[blockCoordinate.y + j + 1][blockCoordinate.x + i] == 1) {
+                        index = Math.floor(Math.random() * 7);
+                        deleteFilledLine();
                         blockCoordinate.y = 1;
                         break;
                     } else break;
@@ -133,7 +160,8 @@ const collisionDetection = (keyCode) => {
                     if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 1 ||
                       blockCoordinate.x + i <= 0) {
                         return blockCoordinate.x;
-                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] != 1) {
+                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 0) {
+                        if(j < length - 1 && blockShape[index][j + 1][i] == 1) continue;
                         return blockCoordinate.x--;
                     }
                 }
@@ -146,7 +174,8 @@ const collisionDetection = (keyCode) => {
                     if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 1 ||
                       blockCoordinate.x + i >= width - 1) {
                         return blockCoordinate.x;
-                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] != 1) {
+                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 0) {
+                        if(j < length - 1 && blockShape[index][j + 1][i] == 1) continue;
                         return blockCoordinate.x++;
                     }
                 }
@@ -156,7 +185,7 @@ const collisionDetection = (keyCode) => {
 }
 
 document.addEventListener("keydown", (e) => {
-    moveBlock(e, index);
+    moveBlock(e);
     paint();
 });
 

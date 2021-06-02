@@ -13,6 +13,12 @@ const initializeMap = () => {
         }
     }
 }
+// same code
+// 1. Array.from({length: row}, () => new Array(column).fill(0))
+// 2. Array.from({length: row}).map(x => new Array(column).fill(0))
+
+const mapCoordinateCopy = Array.from({ length: row }, () => Array(column).fill(0));
+
 
 const drawMap = () => {
     for(let i = 0; i < row; i++) {
@@ -27,4 +33,4 @@ const drawMap = () => {
     }
 }
 
-export { mapCoordinate, initializeMap, drawMap};
+export { mapCoordinate, mapCoordinateCopy, initializeMap, drawMap};
