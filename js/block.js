@@ -4,12 +4,10 @@ import { mapCoordinate } from "./map.js";
 import { blockShape } from "./blockShape.js";
 
 let status = true;
-//let index = Math.floor(Math.random() * 7);
-let index = 2;
+let index = Math.floor(Math.random() * 7);
 console.log(index);
 let fillBlock = 0;
 let dy = 0;
-let dx = 0;
 const length = blockShape[index].length;
 const height = canvas.height / 20;
 const width = canvas.width / 20;
@@ -21,8 +19,7 @@ const downBlock = () => {
     for(let i = 0; i < length; i++) {
         for(let j = 0; j < length; j++) {
             if(blockShape[index][i][j] == 1) {
-                dy = i;
-                mapCoordinate[blockCoordinate.y - 1 + dy][blockCoordinate.x + j] = 0;
+                mapCoordinate[blockCoordinate.y - 1 + i][blockCoordinate.x + j] = 0;
             }
         }
     }
@@ -30,7 +27,7 @@ const downBlock = () => {
         for(let j = 0; j < length; j++) {
             if(blockShape[index][i][j] == 1) {
                 dy = i;
-                mapCoordinate[blockCoordinate.y + dy][blockCoordinate.x + j] = 1;
+                mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
             }
         }
     }
@@ -56,7 +53,6 @@ const moveBlock = (e, index) => {
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][i][j] == 1) {
-                    dx = j;
                     mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
                 }
             }
@@ -74,7 +70,6 @@ const moveBlock = (e, index) => {
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][i][j] == 1) {
-                    dx = j;
                     mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
                 }
             }
@@ -118,38 +113,40 @@ const checkFloorFull = () => {
         }
     }
 }
-// collision detection with other block or wall when a block moves
+
 const collisionDetection = (keyCode) => {
     if(keyCode == 40) {
-        for(let i = 0; i <= dx; i++) {
-            if(blockShape[index][dy][i] == 1 && mapCoordinate[blockCoordinate.y + dy + 1][blockCoordinate.x + i] == 1) {
-                blockCoordinate.y = 1;
-                break;
+        for(let i = 0; i < length; i++) {
+            for(let j = length - 1; j >= 0; j--) {
+                if(blockShape[index][j][i] == 1) {
+                    if(mapCoordinate[blockCoordinate.y + j + 1][blockCoordinate.x + i] == 1) {
+                        blockCoordinate.y = 1;
+                        break;
+                    } else break;
+                }
             }
         }
     } else if(keyCode == 37) { //←
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][j][i] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j - 1] == 1) {
-                        console.log(i , j);
+                    if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 1 ||
+                      blockCoordinate.x + i <= 0) {
                         return blockCoordinate.x;
-                    } else if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j - 1] != 1) {
-                        console.log(i, j);
+                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] != 1) {
                         return blockCoordinate.x--;
                     }
                 }
             }
         }
     } else if(keyCode == 39) { //→
-        for(let i = length - 1; i > 0; i--) {
-            for(let j = 0; j > length; j++) {
+        for(let i = length - 1; i >= 0; i--) {
+            for(let j = 0; j < length; j++) {
                 if(blockShape[index][j][i] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j + 1] == 1) {
-                        console.log(i, j);
+                    if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 1 ||
+                      blockCoordinate.x + i >= width - 1) {
                         return blockCoordinate.x;
-                    } else if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j + 1] != 1) {
-                        console.log(i, j);
+                    } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] != 1) {
                         return blockCoordinate.x++;
                     }
                 }
