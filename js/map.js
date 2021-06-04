@@ -25,8 +25,7 @@ const drawMap = () => {
         for(let j = 0; j < column; j++) {
             if(mapCoordinate[i][j] == 0) {
                 rect(j * blockSize,  i * blockSize, blockSize - 1, blockSize - 1, "DarkSlateGray"); 
-            }
-            else if(mapCoordinate[i][j] == 1) {
+            } else if(mapCoordinate[i][j] == 1) {
                 rect(j * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "Blue");
             }
         }

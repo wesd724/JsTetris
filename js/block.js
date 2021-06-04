@@ -7,7 +7,6 @@ let fillBlock = 0;
 let dy = 0;
 let rotation = 0;
 let index = Math.floor(Math.random() * 7);
-console.log(index);
 
 const length = blockShape[index][rotation][rotation].length;
 const height = canvas.height / 20;
@@ -20,7 +19,8 @@ const downBlock = () => {
     for(let i = 0; i < length; i++) {
         for(let j = 0; j < length; j++) {
             if(blockShape[index][rotation][i][j] == 1) {
-                mapCoordinate[blockCoordinate.y - 1 + i][blockCoordinate.x + j] = 0;
+                if(blockCoordinate.y > 0)
+                    mapCoordinate[blockCoordinate.y - 1 + i][blockCoordinate.x + j] = 0;
             }
         }
     }
@@ -33,9 +33,7 @@ const downBlock = () => {
         }
     }
     if(blockCoordinate.y + dy == height - 1) {
-        index = Math.floor(Math.random() * 7);
-        deleteFilledLine();
-        blockCoordinate.y = 1;
+        initializeSetting();
     } else {
         collisionDetection(40);
     }
@@ -48,7 +46,6 @@ const moveBlock = (e) => {
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][rotation][i][j] == 1) {
-                    if(blockCoordinate.y > 0) 
                         mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + 1 + j] = 0;
                 }
             }
@@ -98,9 +95,7 @@ const moveBlock = (e) => {
         }
         
         if(blockCoordinate.y + dy == height - 1) {
-            index = Math.floor(Math.random() * 7);
-            deleteFilledLine();
-            blockCoordinate.y = 1;
+            initializeSetting();
         } else {
             collisionDetection(e.keyCode);
         }
@@ -147,88 +142,42 @@ const allLinedown = lineNumber => {
 }
 
 const rotationBlock = () => {
+     // Delete current block
     for(let i = 0; i < length; i++) {
         for(let j = 0; j < length; j++) {
             if(blockShape[index][rotation][i][j] == 1) {
                   mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
             }
         }
-    } // Delete current block
+    }
 
-    
     if(rotation + 1 > 3) rotation = -1;
-    
+     // Determine if a block is rotatable
     for(let i = 0; i < length; i++) { //↓
-        for(let j = length - 1; j >= 0; j--) {
-            if(blockShape[index][rotation + 1][j][i] == 1) {
-                if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i] == 1) {
-                    console.log("Impossible Rotation");
-                    if(rotation = - 1) rotation = 0;
-                    for(let i = 0; i < length; i++) {
-                        for(let j = 0; j < length; j++) {
-                            if(blockShape[index][rotation][i][j] == 1) {
-                                dy = i;
-                                mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                            }
-                        }
-                    }
-                    return;
-                } else break;
-            }
-        }
-    }
-    for(let i = 0; i < length; i++) { //←, ↑
         for(let j = 0; j < length; j++) {
-            if(blockShape[index][rotation + 1][j][i] == 1) {
-                if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i] == 1 ||
-                  blockCoordinate.x + i <= 0) {
+            if(blockShape[index][rotation + 1][i][j] == 1) {
+                if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] == 1) {
+                    //if a block a non-rotable
+                    if(rotation == -1) rotation = 3;
                     console.log("Impossible Rotation");
-                    if(rotation = - 1) rotation = 0;
                     for(let i = 0; i < length; i++) {
                         for(let j = 0; j < length; j++) {
                             if(blockShape[index][rotation][i][j] == 1) {
-                                dy = i;
                                 mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
                             }
                         }
                     }
                     return;
-                } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 0) {
-                    if(j < length - 1 && blockShape[index][rotation + 1][j + 1][i] == 1) continue;
-                }
-            }
-        }
-    }
-    for(let i = length - 1; i >= 0; i--) { //→
-        for(let j = 0; j < length; j++) {
-            if(blockShape[index][rotation + 1][j][i] == 1) {
-                if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i] == 1 ||
-                  blockCoordinate.x + i >= width - 1) {
-                    console.log("Impossible Rotation");
-                    if(rotation = - 1) rotation = 0;
-                    for(let i = 0; i < length; i++) {
-                        for(let j = 0; j < length; j++) {
-                            if(blockShape[index][rotation][i][j] == 1) {
-                                dy = i;
-                                mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                            }
-                        }
-                    }
-                    return;
-                } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 0) {
-                    if(j < length - 1 && blockShape[index][rotation + 1][j + 1][i] == 1) continue;
                 }
             }
         }
     }
     
+    // if a block a rotable
     if(rotation < 3) rotation++;
-    console.log(rotation);
-    
     for(let i = 0; i < length; i++) {
         for(let j = 0; j < length; j++) {
             if(blockShape[index][rotation][i][j] == 1) {
-                dy = i;
                 mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
             }
         }
@@ -241,9 +190,7 @@ const collisionDetection = keyCode => {
             for(let j = length - 1; j >= 0; j--) {
                 if(blockShape[index][rotation][j][i] == 1) {
                     if(mapCoordinate[blockCoordinate.y + j + 1][blockCoordinate.x + i] == 1) {
-                        index = Math.floor(Math.random() * 7);
-                        deleteFilledLine();
-                        blockCoordinate.y = 1;
+                        initializeSetting();
                         break;
                     } else break;
                 }
@@ -278,6 +225,14 @@ const collisionDetection = keyCode => {
             }
         }
     }
+}
+
+const initializeSetting = () => {
+    index = Math.floor(Math.random() * 7);
+    rotation = 0;
+    deleteFilledLine();
+    blockCoordinate.y = 1;
+
 }
 
 document.addEventListener("keydown", (e) => {
