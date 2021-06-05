@@ -1,7 +1,8 @@
 import { paint } from "./render.js";
 import { mapCoordinate, mapCoordinateCopy } from "./map.js";
 import { blockShape } from "./blockShape.js";
-import { nextBlock, drawPreview } from "./previewWindow.js"
+import { nextBlock, drawPreview } from "./previewWindow.js";
+import { addScore } from "./score.js"
 
 let fillBlock = 0;
 let dy = 0;
@@ -113,6 +114,7 @@ const deleteFilledLine = () => {
                 fillBlock++;
                 if(fillBlock == width - 2) {
                     console.log(`DELETE ${i}`);
+                    addScore();
                     for(let j = 1; j < width - 1; j++) {
                         mapCoordinate[i][j] = 0;
                      }

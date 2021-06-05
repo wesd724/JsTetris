@@ -8,5 +8,11 @@ const rect = (x, y, width, height, color) => {
     ctx.fillRect(x, y, width, height);
 }
 
-export { canvas, ctx, rect };
+const text = (text, x, y, font, color = "black") => {
+    ctx.fillStyle = color;
+    ctx.font = font;
+    ctx.fillText(text, x, y);
+}
+
+export { canvas, ctx, rect, text };
 
