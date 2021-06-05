@@ -1,7 +1,7 @@
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = 420;
-canvas.height = 680;
+canvas.width = 380;
+canvas.height = 420;
 
 const rect = (x, y, width, height, color) => {
     ctx.fillStyle = color;

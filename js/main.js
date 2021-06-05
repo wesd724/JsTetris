@@ -8,4 +8,4 @@ bg();
 initializeMap();
 drawMap();
 document.addEventListener("click", render);
-setInterval(render, 300);
+//setInterval(render, 300);

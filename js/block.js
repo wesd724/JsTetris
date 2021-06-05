@@ -9,10 +9,10 @@ let rotation = 0;
 let index = Math.floor(Math.random() * 7);
 
 const length = blockShape[index][rotation][rotation].length;
-const height = canvas.height / 20;
-const width = canvas.width / 20;
+const height = 21;
+const width = 12;
 const blockSize = 20;
-const blockCoordinate = { x: 10, y: -1 };
+const blockCoordinate = { x: 3, y: -1 };
 
 const downBlock = () => {
     blockCoordinate.y++;
@@ -32,7 +32,7 @@ const downBlock = () => {
             }
         }
     }
-    if(blockCoordinate.y + dy == height - 1) {
+    if(blockCoordinate.y + dy == height - 2) {
         initializeSetting();
     } else {
         collisionDetection(40);
@@ -94,7 +94,7 @@ const moveBlock = (e) => {
             }
         }
         
-        if(blockCoordinate.y + dy == height - 1) {
+        if(blockCoordinate.y + dy == height - 2) {
             initializeSetting();
         } else {
             collisionDetection(e.keyCode);
@@ -107,11 +107,11 @@ const moveBlock = (e) => {
 
 const deleteFilledLine = () => {
     let lineNumber = 0;
-    for(let i = 0; i < height; i++) {
-        for(let j = 0; j < width; j++) {
+    for(let i = 0; i < height - 1; i++) {
+        for(let j = 1; j < width - 1; j++) {
             if(mapCoordinate[i][j] == 1) {
                 fillBlock++;
-                if(fillBlock == width - 1) {
+                if(fillBlock == width - 2) {
                     lineNumber = i;
                     console.log(`DELETE ${lineNumber}`);
                     for(let i = 0; i < width; i++) {
@@ -156,7 +156,8 @@ const rotationBlock = () => {
     for(let i = 0; i < length; i++) { //↓
         for(let j = 0; j < length; j++) {
             if(blockShape[index][rotation + 1][i][j] == 1) {
-                if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] == 1) {
+                if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] == 1 ||
+                   mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] == 2) {
                     //if a block a non-rotable
                     if(rotation == -1) rotation = 3;
                     console.log("Impossible Rotation");
@@ -201,7 +202,7 @@ const collisionDetection = keyCode => {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][rotation][j][i] == 1) {
                     if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 1 ||
-                      blockCoordinate.x + i <= 0) {
+                      mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 2) {
                         return blockCoordinate.x;
                     } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i - 1] == 0) {
                         if(j < length - 1 && blockShape[index][rotation][j + 1][i] == 1) continue;
@@ -215,7 +216,7 @@ const collisionDetection = keyCode => {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][rotation][j][i] == 1) {
                     if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 1 ||
-                      blockCoordinate.x + i >= width - 1) {
+                      mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 2) {
                         return blockCoordinate.x;
                     } else if(mapCoordinate[blockCoordinate.y + j][blockCoordinate.x + i + 1] == 0) {
                         if(j < length - 1 && blockShape[index][rotation][j + 1][i] == 1) continue;
@@ -232,6 +233,7 @@ const initializeSetting = () => {
     rotation = 0;
     deleteFilledLine();
     blockCoordinate.y = 1;
+    blockCoordinate.x = 3;
 
 }
 
