@@ -1,4 +1,4 @@
-import { canvas, rect } from "./canvas.js";
+import { rect } from "./canvas.js";
 import { blockSize } from "./block.js";
 
 const row = 21;
@@ -19,9 +19,12 @@ const initializeMap = () => {
     for(let i = 0; i < row; i++) {
         mapCoordinate[i][0] = 2;
         mapCoordinate[i][column - 1] = 2;
+        mapCoordinateCopy[i][0] = 2;
+        mapCoordinateCopy[i][column - 1] = 2;
     }
     for(let i = 0; i < column; i++) {
         mapCoordinate[row - 1][i] = 2;
+        mapCoordinateCopy[row - 1][i] = 2;
     }
 }
 
@@ -42,4 +45,4 @@ const drawMap = () => {
     }
 }
 
-export { mapCoordinate, mapCoordinateCopy, initializeMap, drawMap};
+export { mapCoordinate, mapCoordinateCopy, initializeMap, drawMap, row, column };

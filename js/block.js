@@ -1,7 +1,7 @@
-import { canvas, rect } from "./canvas.js";
 import { paint } from "./render.js";
 import { mapCoordinate, mapCoordinateCopy } from "./map.js";
 import { blockShape } from "./blockShape.js";
+import { nextBlock, drawPreview } from "./previewWindow.js"
 
 let fillBlock = 0;
 let dy = 0;
@@ -106,23 +106,19 @@ const moveBlock = (e) => {
 }
 
 const deleteFilledLine = () => {
-    let lineNumber = 0;
     for(let i = 0; i < height - 1; i++) {
+        fillBlock = 0;
         for(let j = 1; j < width - 1; j++) {
             if(mapCoordinate[i][j] == 1) {
                 fillBlock++;
                 if(fillBlock == width - 2) {
-                    lineNumber = i;
-                    console.log(`DELETE ${lineNumber}`);
-                    for(let i = 0; i < width; i++) {
-                        mapCoordinate[lineNumber][i] = 0;
+                    console.log(`DELETE ${i}`);
+                    for(let j = 1; j < width - 1; j++) {
+                        mapCoordinate[i][j] = 0;
                      }
-                    allLinedown(lineNumber);
+                    allLinedown(i);
                 }
-            } else {
-                fillBlock = 0;
-                break;
-            }
+            } else break;
         }
     }
 }
@@ -138,7 +134,7 @@ const allLinedown = lineNumber => {
             mapCoordinate[i + 1][j] = mapCoordinateCopy[i][j];
         }
     }
-    for(let i = 0; i < width; i++) mapCoordinate[0][i] = 0;
+    for(let i = 1; i < width - 1; i++) mapCoordinate[0][i] = 0;
 }
 
 const rotationBlock = () => {
@@ -229,10 +225,10 @@ const collisionDetection = keyCode => {
 }
 
 const initializeSetting = () => {
-    index = Math.floor(Math.random() * 7);
+    index = nextBlock();
     rotation = 0;
     deleteFilledLine();
-    blockCoordinate.y = 1;
+    blockCoordinate.y = -1;
     blockCoordinate.x = 3;
 
 }
@@ -242,4 +238,4 @@ document.addEventListener("keydown", (e) => {
     paint();
 });
 
-export { blockSize, downBlock, moveBlock };
+export { length, blockSize, downBlock, moveBlock, index };
