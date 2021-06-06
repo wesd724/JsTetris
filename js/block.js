@@ -182,6 +182,17 @@ const rotationBlock = () => {
             }
         }
     }
+    
+    for(let i = 0; i < length; i++) {
+        for(let j = length - 1; j >= 0; j--) {
+            if(blockShape[index][rotation][j][i] == 1) {
+                if(mapCoordinate[blockCoordinate.y + j + 1][blockCoordinate.x + i] == 1) {
+                    initializeSetting();
+                    return;
+                } else break;
+            }
+        }
+    }
 }
 
 const collisionDetection = keyCode => {
@@ -191,7 +202,7 @@ const collisionDetection = keyCode => {
                 if(blockShape[index][rotation][j][i] == 1) {
                     if(mapCoordinate[blockCoordinate.y + j + 1][blockCoordinate.x + i] == 1) {
                         initializeSetting();
-                        break;
+                        return;
                     } else break;
                 }
             }

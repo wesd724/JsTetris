@@ -17,7 +17,6 @@ drawPreview();
 showUI();
 showScore();
 
-document.addEventListener("click", render);
 let Interval = 0
 //Interval = setInterval(render, 300);
 
