@@ -18,6 +18,6 @@ showUI();
 showScore();
 
 let Interval = 0
-//Interval = setInterval(render, 300);
+//Interval = setInterval(render, 350);
 
 export { Interval };
