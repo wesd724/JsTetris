@@ -35,11 +35,11 @@ const drawMap = () => {
     for(let i = 0; i < row; i++) {
         for(let j = 0; j < column; j++) {
             if(mapCoordinate[i][j] == 0) {
-                rect(j * blockSize,  i * blockSize, blockSize - 1, blockSize - 1, "DarkSlateGray"); 
+                rect(j * blockSize,  i * blockSize, blockSize - 1, blockSize - 1, "#8e9775"); 
             } else if(mapCoordinate[i][j] == 1) {
-                rect(j * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "Blue");
+                rect(j * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "#282846");
             } else if(mapCoordinate[i][j] == 2) {
-                rect(j * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "Sienna");
+                rect(j * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "#4a503d");
             }
         }
     }

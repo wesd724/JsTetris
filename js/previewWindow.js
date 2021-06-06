@@ -42,11 +42,11 @@ const drawPreview = () => {
     for(let i = 0; i < size; i++) {
         for(let j = 0; j < size; j++) {
             if(window[i][j] == 0) {
-                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "Aqua"); 
+                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "#c7b198"); 
             } else if(window[i][j] == 1) {
-                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "MidnightBlue"); 
+                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "#4d4c7d"); 
             } else if(window[i][j] == 2) {
-                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "MediumSeaGreen"); 
+                rect((j + width) * blockSize, i * blockSize, blockSize - 1, blockSize - 1, "#323232"); 
             }
         }
     }

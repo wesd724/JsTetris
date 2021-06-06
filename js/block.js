@@ -1,8 +1,9 @@
+import { Interval } from "./main.js"
 import { paint } from "./render.js";
 import { mapCoordinate, mapCoordinateCopy } from "./map.js";
 import { blockShape } from "./blockShape.js";
 import { nextBlock, drawPreview } from "./previewWindow.js";
-import { addScore } from "./score.js"
+import { addScore, score } from "./UI.js"
 
 let fillBlock = 0;
 let dy = 0;
@@ -226,18 +227,33 @@ const collisionDetection = keyCode => {
     }
 }
 
+const endCheck = () => {
+    for(let i = 1; i < width - 1; i++) {
+        if(mapCoordinate[1][i] == 1) {
+            console.log("end");
+            document.removeEventListener("keydown", draw);
+            clearInterval(Interval);
+            let status = confirm(`your score: ${score}\nRestart?`);
+            if(status) location.reload();
+            else break;
+        }
+    }
+}
+
 const initializeSetting = () => {
     index = nextBlock();
     rotation = 0;
     deleteFilledLine();
     blockCoordinate.y = -1;
     blockCoordinate.x = 3;
-
+    endCheck();
 }
 
-document.addEventListener("keydown", (e) => {
+const draw = (e) => {
     moveBlock(e);
     paint();
-});
+}
+
+document.addEventListener("keydown", draw);
 
 export { length, blockSize, downBlock, moveBlock, index };
