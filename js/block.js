@@ -68,6 +68,91 @@ const moveBlock = (e) => {
     }
 }
 
+const collisionDetection = keyCode => {
+    if(keyCode == 40) {
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                   if(blockCoordinate.y > -1) mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
+                }
+            }
+        }
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    if(mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 1 ||
+                       mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 2) {
+                       for(let i = 0; i < length; i++) {
+                           for(let j = 0; j < length; j++) {
+                               if(blockShape[index][rotation][i][j] == 1) {
+                                   mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
+                               }
+                           }
+                        }
+                        initializeSetting();
+                        return;
+                    }
+                 }
+             }
+         }
+         blockCoordinate.y++;
+    } else if(keyCode == 37) { //←
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
+                }
+            }
+        }
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x - 1 + j] == 1 ||
+                      mapCoordinate[blockCoordinate.y + i][blockCoordinate.x - 1 + j] == 2) {
+                       for(let i = 0; i < length; i++) {
+                           for(let j = 0; j < length; j++) {
+                               if(blockShape[index][rotation][i][j] == 1) {
+                                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
+                               }
+                           }
+                        }
+                        return 0;
+                    }
+                }
+            }
+        }
+        blockCoordinate.x--;
+        return 1;
+    } else if(keyCode == 39) { //→
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
+                }
+            }
+        }
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + 1 + j] == 1 ||
+                      mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + 1 + j] == 2) {
+                       for(let i = 0; i < length; i++) {
+                           for(let j = 0; j < length; j++) {
+                               if(blockShape[index][rotation][i][j] == 1) {
+                                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
+                               }
+                           }
+                        }
+                        return 0;
+                    }
+                }
+            }
+        }
+        blockCoordinate.x++;
+        return 1;
+    }
+}
+
 const deleteFilledLine = () => {
     for(let i = 0; i < height - 1; i++) {
         fillBlock = 0;
@@ -151,91 +236,6 @@ const rotationBlock = () => {
                 } else break;
             }
         }
-    }
-}
-
-const collisionDetection = keyCode => {
-    if(keyCode == 40) {
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                   if(blockCoordinate.y > -1) mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
-                }
-            }
-        }
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 1 ||
-                       mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 2) {
-                       for(let i = 0; i < length; i++) {
-                           for(let j = 0; j < length; j++) {
-                               if(blockShape[index][rotation][i][j] == 1) {
-                                   mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                               }
-                           }
-                        }
-                        initializeSetting();
-                        return;
-                    }
-                 }
-             }
-         }
-         blockCoordinate.y++;
-    } else if(keyCode == 37) { //←
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
-                }
-            }
-        }
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x - 1 + j] == 1 ||
-                      mapCoordinate[blockCoordinate.y + i][blockCoordinate.x - 1 + j] == 2) {
-                       for(let i = 0; i < length; i++) {
-                           for(let j = 0; j < length; j++) {
-                               if(blockShape[index][rotation][i][j] == 1) {
-                                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                               }
-                           }
-                        }
-                        return 0;
-                    }
-                }
-            }
-        }
-        blockCoordinate.x--;
-        return 1;
-    } else if(keyCode == 39) { //→
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 0;
-                }
-            }
-        }
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + 1 + j] == 1 ||
-                      mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + 1 + j] == 2) {
-                       for(let i = 0; i < length; i++) {
-                           for(let j = 0; j < length; j++) {
-                               if(blockShape[index][rotation][i][j] == 1) {
-                                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                               }
-                           }
-                        }
-                        return 0;
-                    }
-                }
-            }
-        }
-        blockCoordinate.x++;
-        return 1;
     }
 }
 
