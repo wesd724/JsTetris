@@ -17,18 +17,14 @@ const blockSize = 20;
 const blockCoordinate = { x: 3, y: -1 };
 
 const downBlock = () => {
-    if(collisionDetection(e.keyCode)) {
-        for(let i = 0; i < length; i++) {
-            for(let j = 0; j < length; j++) {
-                if(blockShape[index][rotation][i][j] == 1) {
-                    dy = i;
-                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                }
+    collisionDetection(40);
+    for(let i = 0; i < length; i++) {
+        for(let j = 0; j < length; j++) {
+            if(blockShape[index][rotation][i][j] == 1) {
+                dy = i;
+                mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
             }
         }
-    }
-    if(blockCoordinate.y + dy == height - 2) {
-        initializeSetting();
     }
 }
 
@@ -57,18 +53,14 @@ const moveBlock = (e) => {
         }
     }
     else if(e.keyCode == 40) {//↓
-        if(collisionDetection(e.keyCode)) {
-            for(let i = 0; i < length; i++) {
-                for(let j = 0; j < length; j++) {
-                    if(blockShape[index][rotation][i][j] == 1) {
-                        dy = i;
-                        mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
-                    }
+        collisionDetection(e.keyCode)
+        for(let i = 0; i < length; i++) {
+            for(let j = 0; j < length; j++) {
+                if(blockShape[index][rotation][i][j] == 1) {
+                    dy = i;
+                    mapCoordinate[blockCoordinate.y + i][blockCoordinate.x + j] = 1;
                 }
             }
-        }
-        if(blockCoordinate.y + dy == height - 2) {
-            initializeSetting();
         }
     }
     else if(e.keyCode == 32) {
@@ -174,7 +166,8 @@ const collisionDetection = keyCode => {
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
                 if(blockShape[index][rotation][i][j] == 1) {
-                    if(mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 1) {
+                    if(mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 1 ||
+                       mapCoordinate[blockCoordinate.y + 1 + i][blockCoordinate.x + j] == 2) {
                        for(let i = 0; i < length; i++) {
                            for(let j = 0; j < length; j++) {
                                if(blockShape[index][rotation][i][j] == 1) {
@@ -183,13 +176,12 @@ const collisionDetection = keyCode => {
                            }
                         }
                         initializeSetting();
-                        return 0;
+                        return;
                     }
                  }
              }
          }
          blockCoordinate.y++;
-         return 1;
     } else if(keyCode == 37) { //←
         for(let i = 0; i < length; i++) {
             for(let j = 0; j < length; j++) {
@@ -260,11 +252,10 @@ const endCheck = () => {
 }
 
 const initializeSetting = () => {
-    console.log(1)
     index = nextBlock();
     rotation = 0;
     deleteFilledLine();
-    blockCoordinate.y = -1;
+    blockCoordinate.y = 0;
     blockCoordinate.x = 3;
     endCheck();
 }
