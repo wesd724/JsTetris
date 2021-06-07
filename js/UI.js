@@ -1,4 +1,4 @@
-import { canvas, ctx, text } from "./canvas.js";
+import { text } from "./canvas.js";
 
 export let score = 0;
 export const showScore = () => {
